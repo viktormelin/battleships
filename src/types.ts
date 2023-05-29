@@ -1,4 +1,8 @@
-export interface BoardState {
-  id: number
-  state: boolean | string
+export interface Boat {
+  index: number
+  kapput: boolean
+}
+export interface User {
+  userName: string
+  boats: Boat[]
 }

@@ -9,6 +9,9 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+.kapput {
+  @apply bg-yellow-400;
+}
 /* Tailwind Helpers
 
   Primary Color (blue): bg-blue-500
