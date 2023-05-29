@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Tailwind Helpers
+
+  Primary Color (blue): bg-blue-500
+
+  Primary Background: bg-slate-800
+  Secondary Background: bg-slate-700
+  
+  Off-white text: bg-slate-50
+  Off-black text: bg-slate-900
+
+  input: w-full text-sm bg-slate-500 rounded-sm p-2 border-0 text-slate-50 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-400
+
+  button: rounded-sm bg-blue-500 hover:bg-blue-600 cursor-pointer flex items-center justify-center
+  
+*/
