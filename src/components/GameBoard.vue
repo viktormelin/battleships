@@ -3,6 +3,7 @@ import { onMounted, ref } from 'vue'
 import { User, Boat } from '../types'
 import InputForm from './InputForm.vue'
 import WinningScreen from './WinningScreen.vue'
+import GameCard from './GameCard.vue'
 
 const playerOne = ref<User>({
   userName: '',
@@ -141,21 +142,7 @@ const handleCardClick = (id: number) => {
     <div id="board" class="relative grid grid-cols-3 gap-1">
       <WinningScreen v-if="gameEnded" :oldPlayer="oldPlayer" @restartGame="restartGame" />
       <div v-for="card in GameBoard" :key="card.index">
-        <div
-          :class="
-            card.kapput ? (card.player === 1 ? 'bg-red-500' : 'bg-yellow-500') : 'bg-slate-700'
-          "
-          class="relative h-[150px] w-[150px] rounded-sm flex items-center justify-center text-slate-300 cursor-pointer hover:bg-slate-600"
-          @click="handleCardClick(card.index)"
-        >
-          <p>{{ card.index }}</p>
-          <img
-            v-if="card.kapput"
-            class="absolute top-0 left-0"
-            src="../assets/pngegg.png"
-            alt="Kapput"
-          />
-        </div>
+        <GameCard :card="card" @handleCardClick="handleCardClick" />
       </div>
     </div>
     <InputForm
