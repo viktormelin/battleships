@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { User, Boat } from '../types'
+import InputForm from './InputForm.vue'
+import WinningScreen from './WinningScreen.vue'
 
 const playerOne = ref<User>({
   userName: '',
@@ -30,19 +32,19 @@ let oldPlayer: number | null = null
 let gameStarted = false
 let gameEnded = false
 
-const userName = ref('')
+// const userName = ref('')
 const activeUser = ref<User>()
 
-const nextPlayer = () => {
+const nextPlayer = (userName: string) => {
   if (currentPlayer.value === 1 && playerOne.value?.boats.length === 2) {
-    if (userName.value.length > 0) {
-      playerOne.value.userName = userName.value
+    if (userName.length > 0) {
+      playerOne.value.userName = userName
     }
 
     currentPlayer.value++
   } else if (currentPlayer.value === 2 && playerTwo.value?.boats.length === 2) {
-    if (userName.value.length > 0) {
-      playerTwo.value.userName = userName.value
+    if (userName.length > 0) {
+      playerTwo.value.userName = userName
     }
   }
 }
@@ -68,7 +70,6 @@ const restartGame = () => {
     })
   }
 
-  userName.value = ''
   currentPlayer.value = 1
   gameEnded = false
   gameStarted = false
@@ -132,52 +133,19 @@ const handleCardClick = (id: number) => {
 </script>
 
 <template>
-  <div v-if="!gameStarted" class="flex flex-col gap-1">
-    <input
-      v-model="userName"
-      placeholder="Namn"
-      type="text"
-      class="w-full text-sm bg-slate-500 rounded-sm p-2 border-0 text-slate-50 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-400"
-    />
-    <button
-      v-if="currentPlayer === 1"
-      @click="nextPlayer"
-      class="rounded-sm bg-blue-500 hover:bg-blue-600 cursor-pointer flex w-full items-center justify-center p-1"
-    >
-      Klar
-    </button>
-    <button
-      v-if="currentPlayer === 2"
-      @click="startGame"
-      class="rounded-sm bg-blue-500 hover:bg-blue-600 cursor-pointer flex w-full items-center justify-center p-1"
-    >
-      Starta
-    </button>
-  </div>
-  <div>
-    <div class="mb-2">
+  <div class="flex flex-col gap-2">
+    <div>
       <h1 class="text-xl">Boat goes Kapput</h1>
       <h2 v-if="gameStarted">Spelare {{ currentPlayer }}s tur</h2>
     </div>
     <div id="board" class="relative grid grid-cols-3 gap-1">
-      <div
-        v-if="gameEnded"
-        class="absolute z-10 w-full h-full bg-slate-700/90 flex items-center justify-center flex-col gap-2 text-xl p-2 text-center"
-      >
-        <p>Winner winner, chicken dinner. Player {{ oldPlayer }} made the boats go Kapput</p>
-        <button
-          @click="restartGame"
-          class="rounded-sm bg-blue-500 hover:bg-blue-600 cursor-pointer p-2 flex items-center justify-center"
-        >
-          Starta Om
-        </button>
-      </div>
+      <WinningScreen v-if="gameEnded" :oldPlayer="oldPlayer" @restartGame="restartGame" />
       <div v-for="card in GameBoard" :key="card.index">
         <div
           :class="
             card.kapput ? (card.player === 1 ? 'bg-red-500' : 'bg-yellow-500') : 'bg-slate-700'
           "
-          class="relative h-[150px] w-[150px] rounded-sm flex items-center justify-center text-slate-300 cursor-pointer"
+          class="relative h-[150px] w-[150px] rounded-sm flex items-center justify-center text-slate-300 cursor-pointer hover:bg-slate-600"
           @click="handleCardClick(card.index)"
         >
           <p>{{ card.index }}</p>
@@ -190,6 +158,12 @@ const handleCardClick = (id: number) => {
         </div>
       </div>
     </div>
+    <InputForm
+      v-if="!gameStarted"
+      :currentPlayer="currentPlayer"
+      @startGame="startGame"
+      @nextPlayer="nextPlayer"
+    />
   </div>
 </template>
 
